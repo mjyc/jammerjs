@@ -5,8 +5,8 @@
   "scripts": {
     "build": "browserify src/index.js -t babelify --outfile dist/index.js -dv",
     "watch": "mkdirp dist && watchify src/index.js -t babelify --outfile dist/index.js -dv",
-    "live-server": "\"live-server --watch=./dist/index.js,./index.html\"",
-    "start": "npm-run-all watch live-server"
+    "live-server": "live-server --watch=./dist/index.js,./index.html",
+    "start": "npm-run-all --parallel watch live-server"
   },
   "repository": "",
   "author": "Michael Jae-Yoon Chung",
