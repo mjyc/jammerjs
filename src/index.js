@@ -1,24 +1,9 @@
-import {run} from '@cycle/run';
-import {div, label, input, hr, h1, makeDOMDriver} from '@cycle/dom';
+console.log('hello world!');
+console.log(require('hammerjs'));
+console.log(require('../node_modules/handtrackjs/dist/handtrack.min.js'));
+// import * as handTrack from 'handtrackjs';
+// console.log(handTrack);
 
-function main(sources) {
-  const vdom$ = sources.DOM
-    .select('.myinput').events('input')
-    .map(ev => ev.target.value)
-    .startWith('')
-    .map(name =>
-      div([
-        label('Name:'),
-        input('.myinput', {attrs: {type: 'text'}}),
-        hr(),
-        h1(`Hello ${name}`)
-      ])
-    );
-  return {
-    DOM: vdom$,
-  };
+export default function TimeTravel () {
+  return 'TimeTravel';
 }
-
-run(main, {
-  DOM: makeDOMDriver('#app')
-});
