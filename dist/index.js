@@ -23000,9 +23000,9 @@ var start = async function start(element, video, canvas) {
     iouThreshold: 0.5, // ioU threshold for non-max suppression
     scoreThreshold: 0.6 }, modelParams);
 
-  if (!model) model = await handTrack.load(modelParams);
   var videoStatus = await handTrack.startVideo(video);
   if (!videoStatus) throw 'Start video failed';
+  if (!model) model = await handTrack.load(modelParams);
 
   var videoWidth = video.width;
   var videoHeight = video.height;
@@ -23014,25 +23014,31 @@ var start = async function start(element, video, canvas) {
       model.renderPredictions(predictions, canvas, context, video);
 
       if (lastPredictions.length === 0 && predictions.length > 0) {
-        touches = [{
-          x: (predictions[0].bbox[0] + 0.0 * predictions[0].bbox[2]) / videoWidth * element.offsetWidth + element.offsetLeft,
-          y: (predictions[0].bbox[1] + 0.0 * predictions[0].bbox[3]) / videoHeight * element.offsetHeight + element.offsetTop,
-          target: element
-        }];
+        touches = predictions.map(function (prediction) {
+          return {
+            x: (prediction.bbox[0] + 0.5 * prediction.bbox[2]) / videoWidth * element.offsetWidth + element.offsetLeft,
+            y: (prediction.bbox[1] + 0.5 * prediction.bbox[3]) / videoHeight * element.offsetHeight + element.offsetTop,
+            target: element
+          };
+        });
         Simulator.events.touch.trigger(touches, touches[0].target, 'start');
       } else if (predictions.length === 0 && lastPredictions.length > 0) {
-        touches = [{
-          x: (lastPredictions[0].bbox[0] + 0.0 * lastPredictions[0].bbox[2]) / videoWidth * element.offsetWidth + element.offsetLeft,
-          y: (lastPredictions[0].bbox[1] + 0.0 * lastPredictions[0].bbox[3]) / videoHeight * element.offsetHeight + element.offsetTop,
-          target: element
-        }];
+        touches = lastPredictions.map(function (prediction) {
+          return {
+            x: (prediction.bbox[0] + 0.5 * prediction.bbox[2]) / videoWidth * element.offsetWidth + element.offsetLeft,
+            y: (prediction.bbox[1] + 0.5 * prediction.bbox[3]) / videoHeight * element.offsetHeight + element.offsetTop,
+            target: element
+          };
+        });
         Simulator.events.touch.trigger(touches, touches[0].target, 'end');
       } else if (predictions.length > 0) {
-        touches = [{
-          x: (predictions[0].bbox[0] + 0.0 * predictions[0].bbox[2]) / videoWidth * element.offsetWidth + element.offsetLeft,
-          y: (predictions[0].bbox[1] + 0.0 * predictions[0].bbox[3]) / videoHeight * element.offsetHeight + element.offsetTop,
-          target: element
-        }];
+        touches = predictions.map(function (prediction) {
+          return {
+            x: (prediction.bbox[0] + 0.5 * prediction.bbox[2]) / videoWidth * element.offsetWidth + element.offsetLeft,
+            y: (prediction.bbox[1] + 0.5 * prediction.bbox[3]) / videoHeight * element.offsetHeight + element.offsetTop,
+            target: element
+          };
+        });
         Simulator.events.touch.trigger(touches, touches[0].target, 'move');
       }
       lastPredictions = predictions;
