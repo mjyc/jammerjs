@@ -1,5 +1,5 @@
 const handTrack = require('../node_modules/handtrackjs/dist/handtrack.min.js');
-require('../node_modules/hammer-simulator/index.js');
+require('hammer-simulator');
 
 
 const start = async (element, video, canvas, {
@@ -26,10 +26,7 @@ const start = async (element, video, canvas, {
   if (!model) model = await handTrack.load(modelParams);
 
 
-  const videoWidth = video.width;
-  const videoHeight = video.height;
-
-
+  const context = canvas.getContext("2d");
   let lastPredictions = [];
   let touches = [];
   function runDetection() {

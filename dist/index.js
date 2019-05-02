@@ -22985,7 +22985,7 @@ Object.defineProperty(exports, "__esModule", {
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var handTrack = require('../node_modules/handtrackjs/dist/handtrack.min.js');
-require('../node_modules/hammer-simulator/index.js');
+require('hammer-simulator');
 
 var start = async function start(element, video, canvas) {
   var _ref = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
@@ -23012,9 +23012,7 @@ var start = async function start(element, video, canvas) {
   if (!videoStatus) throw 'Start video failed';
   if (!model) model = await handTrack.load(modelParams);
 
-  var videoWidth = video.width;
-  var videoHeight = video.height;
-
+  var context = canvas.getContext("2d");
   var lastPredictions = [];
   var touches = [];
   function runDetection() {
@@ -23048,5 +23046,5 @@ var start = async function start(element, video, canvas) {
 
 exports.start = start;
 
-},{"../node_modules/hammer-simulator/index.js":84,"../node_modules/handtrackjs/dist/handtrack.min.js":85}]},{},[156])(156)
+},{"../node_modules/handtrackjs/dist/handtrack.min.js":85,"hammer-simulator":84}]},{},[156])(156)
 });
