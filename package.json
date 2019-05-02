@@ -1,15 +1,17 @@
 {
   "name": "jammerjs",
   "version": "0.0.0",
-  "description": "",
+  "description": "A Cycle.js driver for pose detection using TensorFlow.js-powered PoseNet",
   "scripts": {
     "prebuild": "rimraf lib && mkdirp lib",
     "build": "babel src -d lib",
     "browserify": "mkdirp dist && browserify src/index.js --standalone HandtrackTouch -t babelify --outfile dist/index.js"
   },
-  "repository": "https://github.com/mjyc/jammer.js",
   "author": "Michael Jae-Yoon Chung",
   "license": "MIT",
+  "bugs": "https://github.com/mjyc/jammerjs/issues",
+  "repository": "https://github.com/mjyc/jammerjs",
+  "main": "lib/index.js",
   "dependencies": {
     "hammer-simulator": "0.0.1",
     "handtrackjs": "0.0.13"
