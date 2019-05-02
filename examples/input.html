@@ -13,14 +13,12 @@
         </div>
 
         <pre id="debug" style="overflow:hidden; background: #eee; padding: 15px;"></pre>
-        <pre id="debug2" style="overflow:hidden; background: #eee; padding: 15px;"></pre>
 
         <pre id="log" style="overflow:hidden;"></pre>
 
         <div id="handtrackjs">
           <video autoplay="autoplay" style="display: none;"></video>
           <canvas></canvas>
-          <div>Loading...</div>
         </div>
     </div>
     <script src="../node_modules/hammerjs/hammer.js"></script>
@@ -28,60 +26,23 @@
     <script src="../dist/index.js"></script>
     <script>
 
-        console.log(HandtrackTouch);
-
-        Object.prototype.toDirString = function() {
-            var output = [];
-            for(var key in this) {
-                if(this.hasOwnProperty(key)) {
-                    var value = this[key];
-                    if(Array.isArray(value)) {
-                        value = "Array("+ value.length +"):"+ value;
-                    } else if(value instanceof HTMLElement) {
-                        value = value +" ("+ value.outerHTML.substring(0, 50) +"...)";
-                    }
-                    output.push(key +": "+ value);
-                }
-            }
-            return output.join("\n")
-        };
-
         var el = document.querySelector("#hit");
         var log = document.querySelector("#log");
         var debug = document.querySelector("#debug");
 
-        // el.addEventListener("touchmove", function(ev) {console.log(ev)});
-
-
         var mc = new Hammer(el, {inputClass: Hammer.TouchInput});
         mc.get('pinch').set({ enable: true });
 
-        // mc.on("hammer.input", function(ev) {
-        //     debug.innerHTML = [ev.srcEvent.type, ev.pointers.length, ev.isFinal, ev.deltaX, ev.deltaY].join("<br>");
-        // });
-        // mc.on("swipe", function(ev) {
-        //     debug.innerHTML = [ev.srcEvent.type, ev.pointers.length, ev.isFinal, ev.deltaX, ev.deltaY].join("<br>");
-        // });
-        mc.on("pan swipe rotate pinch tap doubletap press", function(ev) {
-                el.textContent = ev.type +" "+ el.textContent;
-            });
+        mc.on("hammer.input", function(ev) {
+            debug.innerHTML = [ev.srcEvent.type, ev.pointers.length, ev.isFinal, ev.deltaX, ev.deltaY].join("<br>");
+        });
+
 
         var video = document.getElementById("handtrackjs").getElementsByTagName("video")[0];
-        // video.width = 320
-        // video.height = 240
         var canvas = document.getElementById("handtrackjs").getElementsByTagName("canvas")[0];
         const context = canvas.getContext("2d");
-        var trackerStatus = document.getElementById("handtrackjs").getElementsByTagName("div")[0];
 
-        // let isVideo = false;
-
-
-    HandtrackTouch.start(
-        document.querySelector("#hit"),
-        video,
-        canvas,
-        );
-
+        HandtrackTouch.start(el, video, canvas);
 
     </script>
 </body>

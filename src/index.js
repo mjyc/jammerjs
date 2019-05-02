@@ -14,9 +14,9 @@ const start = async (element, video, canvas, {
     ...modelParams,
   };
 
-  if (!model) model = await handTrack.load(modelParams);
   let videoStatus = await handTrack.startVideo(video);
   if (!videoStatus) throw 'Start video failed';
+  if (!model) model = await handTrack.load(modelParams);
 
 
   const videoWidth = video.width;
