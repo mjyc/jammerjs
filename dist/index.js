@@ -22981,16 +22981,70 @@ exports.createContext = Script.createContext = function (context) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = HandtrackTouch;
-var handtrack = require('../node_modules/handtrackjs/dist/handtrack.min.js');
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var handTrack = require('../node_modules/handtrackjs/dist/handtrack.min.js');
 require('../node_modules/hammer-simulator/index.js');
 
-console.log('handTrack', handtrack);
-console.log(Simulator);
+var start = async function start(element, video, canvas) {
+  var _ref = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
+      _ref$model = _ref.model,
+      model = _ref$model === undefined ? null : _ref$model,
+      _ref$modelParams = _ref.modelParams,
+      modelParams = _ref$modelParams === undefined ? {} : _ref$modelParams;
 
-function HandtrackTouch() {
-  return 'HandtrackTouch';
-}
+  modelParams = _extends({
+    flipHorizontal: true, // flip e.g for video
+    maxNumBoxes: 2, // maximum number of boxes to detect
+    iouThreshold: 0.5, // ioU threshold for non-max suppression
+    scoreThreshold: 0.6 }, modelParams);
+
+  if (!model) model = await handTrack.load(modelParams);
+  var videoStatus = await handTrack.startVideo(video);
+  if (!videoStatus) throw 'Start video failed';
+
+  var videoWidth = video.width;
+  var videoHeight = video.height;
+
+  var lastPredictions = [];
+  var touches = [];
+  function runDetection() {
+    model.detect(video).then(function (predictions) {
+      model.renderPredictions(predictions, canvas, context, video);
+
+      if (lastPredictions.length === 0 && predictions.length > 0) {
+        touches = [{
+          x: (predictions[0].bbox[0] + 0.0 * predictions[0].bbox[2]) / videoWidth * element.offsetWidth + element.offsetLeft,
+          y: (predictions[0].bbox[1] + 0.0 * predictions[0].bbox[3]) / videoHeight * element.offsetHeight + element.offsetTop,
+          target: element
+        }];
+        Simulator.events.touch.trigger(touches, touches[0].target, 'start');
+      } else if (predictions.length === 0 && lastPredictions.length > 0) {
+        touches = [{
+          x: (lastPredictions[0].bbox[0] + 0.0 * lastPredictions[0].bbox[2]) / videoWidth * element.offsetWidth + element.offsetLeft,
+          y: (lastPredictions[0].bbox[1] + 0.0 * lastPredictions[0].bbox[3]) / videoHeight * element.offsetHeight + element.offsetTop,
+          target: element
+        }];
+        Simulator.events.touch.trigger(touches, touches[0].target, 'end');
+      } else if (predictions.length > 0) {
+        touches = [{
+          x: (predictions[0].bbox[0] + 0.0 * predictions[0].bbox[2]) / videoWidth * element.offsetWidth + element.offsetLeft,
+          y: (predictions[0].bbox[1] + 0.0 * predictions[0].bbox[3]) / videoHeight * element.offsetHeight + element.offsetTop,
+          target: element
+        }];
+        Simulator.events.touch.trigger(touches, touches[0].target, 'move');
+      }
+      lastPredictions = predictions;
+
+      requestAnimationFrame(runDetection);
+    });
+  }
+
+  runDetection();
+};
+
+exports.start = start;
 
 },{"../node_modules/hammer-simulator/index.js":84,"../node_modules/handtrackjs/dist/handtrack.min.js":85}]},{},[156])(156)
 });

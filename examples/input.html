@@ -28,6 +28,8 @@
     <script src="../dist/index.js"></script>
     <script>
 
+        console.log(HandtrackTouch);
+
         Object.prototype.toDirString = function() {
             var output = [];
             for(var key in this) {
@@ -74,83 +76,11 @@
         // let isVideo = false;
 
 
-
-  let model = null;
-  let isVideo = false;
-
-  const modelParams = {
-    flipHorizontal: true,   // flip e.g for video
-    maxNumBoxes: 20,        // maximum number of boxes to detect
-    iouThreshold: 0.5,      // ioU threshold for non-max suppression
-    scoreThreshold: 0.6,    // confidence threshold for predictions.
-  }
-
-  handTrack.load(modelParams).then(lmodel => {
-    model = lmodel;
-  });
-
-  function startVideo() {
-    handTrack.startVideo(video).then(function (status) {
-      console.log("video started", status);
-      if (status) {
-        isVideo = true
-        runDetection()
-      }
-    });
-  }
-
-  let lastPredictions = [];
-
-  Simulator.setType('touch');
-    Simulator.events.touch.fakeSupport();
-
-  function runDetection() {
-    let posX;
-    let posY;
-    let elements = document.querySelector("#hit");
-    let touches;
-
-    model.detect(video).then(predictions => {
-      // console.log("Predictions: ", predictions);
-      model.renderPredictions(predictions, canvas, context, video);
-
-      if (lastPredictions.length === 0
-        && predictions.length > 0) {
-        // console.log('start')
-
-        posX = predictions[0].bbox[0];
-        posY = predictions[0].bbox[1];
-        touches = [{ x: posX, y: posY, target: elements }];
-        Simulator.events.touch.trigger(touches, touches[0].target, 'start');
-
-      } else if (predictions.length === 0
-        && lastPredictions.length > 0) {
-        // console.log('end')
-
-        posX = lastPredictions[0].bbox[0];
-        posY = lastPredictions[0].bbox[1];
-        touches = [{ x: posX, y: posY, target: elements }];
-        Simulator.events.touch.trigger(touches, touches[0].target, 'end');
-
-      } else if (predictions.length > 0) {
-        // console.log('moving');
-
-        posX = predictions[0].bbox[0];
-        posY = predictions[0].bbox[1];
-        touches = [{ x: posX, y: posY, target: elements }];
-        Simulator.events.touch.trigger(touches, touches[0].target, 'move');
-
-      }
-
-      lastPredictions = predictions;
-
-      if (isVideo) {
-        requestAnimationFrame(runDetection);
-      }
-    });
-  }
-
-  startVideo();
+    HandtrackTouch.start(
+        document.querySelector("#hit"),
+        video,
+        canvas,
+        );
 
 
     </script>
