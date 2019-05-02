@@ -5,6 +5,13 @@ require('../node_modules/hammer-simulator/index.js');
 const start = async (element, video, canvas, {
   model = null,
   modelParams = {},
+  transform = (prediction, video, target) => ({
+    x: (prediction.bbox[0] + 0.5 * prediction.bbox[2]) /
+        video.width * target.offsetWidth + target.offsetLeft,
+    y: (prediction.bbox[1] + 0.5 * prediction.bbox[3]) /
+        video.height * target.offsetHeight + target.offsetTop,
+    target: target,
+  }),
 } = {}) => {
   modelParams = {
     flipHorizontal: true,   // flip e.g for video
@@ -22,6 +29,7 @@ const start = async (element, video, canvas, {
   const videoWidth = video.width;
   const videoHeight = video.height;
 
+
   let lastPredictions = [];
   let touches = [];
   function runDetection() {
@@ -29,31 +37,16 @@ const start = async (element, video, canvas, {
       model.renderPredictions(predictions, canvas, context, video);
 
       if (lastPredictions.length === 0 && predictions.length > 0) {
-        touches = predictions.map(prediction => ({
-          x: (prediction.bbox[0] + 0.5 * prediction.bbox[2]) /
-              videoWidth * element.offsetWidth + element.offsetLeft,
-          y: (prediction.bbox[1] + 0.5 * prediction.bbox[3]) /
-              videoHeight * element.offsetHeight + element.offsetTop,
-          target: element,
-        }));
+        touches = predictions.map(prediction =>
+          transform(prediction, video, element));
         Simulator.events.touch.trigger(touches, touches[0].target, 'start');
       } else if (predictions.length === 0 && lastPredictions.length > 0) {
-        touches = lastPredictions.map(prediction => ({
-          x: (prediction.bbox[0] + 0.5 * prediction.bbox[2]) /
-              videoWidth * element.offsetWidth + element.offsetLeft,
-          y: (prediction.bbox[1] + 0.5 * prediction.bbox[3]) /
-              videoHeight * element.offsetHeight + element.offsetTop,
-          target: element,
-        }));
+        touches = lastPredictions.map(prediction =>
+          transform(prediction, video, element));
         Simulator.events.touch.trigger(touches, touches[0].target, 'end');
       } else if (predictions.length > 0) {
-        touches = predictions.map(prediction => ({
-          x: (prediction.bbox[0] + 0.5 * prediction.bbox[2]) /
-              videoWidth * element.offsetWidth + element.offsetLeft,
-          y: (prediction.bbox[1] + 0.5 * prediction.bbox[3]) /
-              videoHeight * element.offsetHeight + element.offsetTop,
-          target: element,
-        }));
+        touches = predictions.map(prediction =>
+          transform(prediction, video, element));
         Simulator.events.touch.trigger(touches, touches[0].target, 'move');
       }
       lastPredictions = predictions;

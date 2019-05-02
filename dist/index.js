@@ -22992,7 +22992,15 @@ var start = async function start(element, video, canvas) {
       _ref$model = _ref.model,
       model = _ref$model === undefined ? null : _ref$model,
       _ref$modelParams = _ref.modelParams,
-      modelParams = _ref$modelParams === undefined ? {} : _ref$modelParams;
+      modelParams = _ref$modelParams === undefined ? {} : _ref$modelParams,
+      _ref$transform = _ref.transform,
+      transform = _ref$transform === undefined ? function (prediction, video, target) {
+    return {
+      x: (prediction.bbox[0] + 0.5 * prediction.bbox[2]) / video.width * target.offsetWidth + target.offsetLeft,
+      y: (prediction.bbox[1] + 0.5 * prediction.bbox[3]) / video.height * target.offsetHeight + target.offsetTop,
+      target: target
+    };
+  } : _ref$transform;
 
   modelParams = _extends({
     flipHorizontal: true, // flip e.g for video
@@ -23015,29 +23023,17 @@ var start = async function start(element, video, canvas) {
 
       if (lastPredictions.length === 0 && predictions.length > 0) {
         touches = predictions.map(function (prediction) {
-          return {
-            x: (prediction.bbox[0] + 0.5 * prediction.bbox[2]) / videoWidth * element.offsetWidth + element.offsetLeft,
-            y: (prediction.bbox[1] + 0.5 * prediction.bbox[3]) / videoHeight * element.offsetHeight + element.offsetTop,
-            target: element
-          };
+          return transform(prediction, video, element);
         });
         Simulator.events.touch.trigger(touches, touches[0].target, 'start');
       } else if (predictions.length === 0 && lastPredictions.length > 0) {
         touches = lastPredictions.map(function (prediction) {
-          return {
-            x: (prediction.bbox[0] + 0.5 * prediction.bbox[2]) / videoWidth * element.offsetWidth + element.offsetLeft,
-            y: (prediction.bbox[1] + 0.5 * prediction.bbox[3]) / videoHeight * element.offsetHeight + element.offsetTop,
-            target: element
-          };
+          return transform(prediction, video, element);
         });
         Simulator.events.touch.trigger(touches, touches[0].target, 'end');
       } else if (predictions.length > 0) {
         touches = predictions.map(function (prediction) {
-          return {
-            x: (prediction.bbox[0] + 0.5 * prediction.bbox[2]) / videoWidth * element.offsetWidth + element.offsetLeft,
-            y: (prediction.bbox[1] + 0.5 * prediction.bbox[3]) / videoHeight * element.offsetHeight + element.offsetTop,
-            target: element
-          };
+          return transform(prediction, video, element);
         });
         Simulator.events.touch.trigger(touches, touches[0].target, 'move');
       }

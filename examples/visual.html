@@ -218,7 +218,16 @@
     var canvas = document.getElementById("handtrackjs").getElementsByTagName("canvas")[0];
     const context = canvas.getContext("2d");
 
-    HandtrackTouch.start(el, video, canvas);
+    var options = {
+        transform: function (prediction, video, target) {
+            return {
+                x: (prediction.bbox[0] + 0.5 * prediction.bbox[2]) / video.width * 1920,
+                y: (prediction.bbox[1] + 0.5 * prediction.bbox[3]) / video.height * 1200,
+                target: target,
+            };
+        }
+    };
+    HandtrackTouch.start(el, video, canvas, options);
 
 </script>
 </body>
