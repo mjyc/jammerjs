@@ -5,7 +5,7 @@
   "scripts": {
     "prebuild": "rimraf lib && mkdirp lib",
     "build": "babel src -d lib",
-    "browserify": "mkdirp dist && browserify src/index.js --standalone TimeTravel -t babelify --outfile dist/index.js"
+    "browserify": "mkdirp dist && browserify src/index.js --standalone HandtrackTouch -t babelify --outfile dist/index.js"
   },
   "repository": "https://github.com/mjyc/jammer.js",
   "author": "Michael Jae-Yoon Chung",

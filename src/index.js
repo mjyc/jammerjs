@@ -1,6 +1,9 @@
-console.log('hello world!');
+// require('../node_modules/handtrackjs/dist/handtrack.min.js');
+
+// console.log('handTrack', handtrack);
+
 // console.log(require('hammerjs'));
-// console.log(require('../node_modules/handtrackjs/dist/handtrack.min.js'));
+console.log(require('../node_modules/handtrackjs/dist/handtrack.min.js'));
 // import * as handTrack from 'handtrackjs';
 // console.log(handTrack);
 
@@ -26,6 +29,6 @@ console.log('hello world!');
 //   }
 // }
 
-export default function TimeTravel () {
-  return 'TimeTravel';
+export default function HandtrackTouch () {
+  return 'HandtrackTouch';
 }
