@@ -1,4 +1,5 @@
-import * as handTrack from '../node_modules/handtrackjs/dist/handtrack.min.js';
+import * as handTrack from 'handtrackjs';
+// import * as handTrack from '../node_modules/handtrackjs/dist/handtrack.min.js';  // for standalone
 import 'hammer-simulator';
 
 
