@@ -1,5 +1,5 @@
-const handTrack = require('../node_modules/handtrackjs/dist/handtrack.min.js');
-require('hammer-simulator');
+import * as handTrack from '../node_modules/handtrackjs/dist/handtrack.min.js';
+import 'hammer-simulator';
 
 
 const start = async (element, video, canvas, {

@@ -22981,11 +22981,17 @@ exports.createContext = Script.createContext = function (context) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.start = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var handTrack = require('../node_modules/handtrackjs/dist/handtrack.min.js');
+var _handtrackMin = require('../node_modules/handtrackjs/dist/handtrack.min.js');
+
+var handTrack = _interopRequireWildcard(_handtrackMin);
+
 require('hammer-simulator');
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var start = async function start(element, video, canvas) {
   var _ref = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
