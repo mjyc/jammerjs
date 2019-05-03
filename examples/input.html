@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <meta name="msapplication-tap-highlight" content="no"/>
     <link rel="stylesheet" href="assets/style.css">
-    <title>Hammer.js</title>
+    <title>Jammer.js</title>
 </head>
 <body>
     <div class="container">
@@ -29,7 +29,7 @@
         var log = document.querySelector("#log");
         var debug = document.querySelector("#debug");
 
-        var mc = new Hammer(el, {inputClass: Hammer.TouchInput});
+        var mc = new Hammer(el);
         mc.get('pinch').set({ enable: true });
 
         mc.on("hammer.input", function(ev) {
@@ -39,7 +39,6 @@
 
         var video = document.getElementById("handtrackjs").getElementsByTagName("video")[0];
         var canvas = document.getElementById("handtrackjs").getElementsByTagName("canvas")[0];
-        const context = canvas.getContext("2d");
 
         HandtrackTouch.start(el, video, canvas);
 
