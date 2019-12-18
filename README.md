@@ -23,4 +23,4 @@ npm install
 npm start
 ```
 
-and checkout [`examples/demo/index.js`](./examples/demo/index.js) for usage.
+and checkout [`examples/demo/src/index.js`](./examples/demo/src/index.js) for usage.
