@@ -7,11 +7,11 @@ Jammer.js uses [Handtrack.js](https://github.com/victordibia/handtrack.js/) to d
 
 ## Demos
 
-Swipe ([Codesandbox](https://z8okl48ox.codesandbox.io/)):
+Swipe ([Codesandbox](https://vj96q9x0my.codesandbox.io/)):
 
 ![demo](https://user-images.githubusercontent.com/6210380/57110533-b1f23400-6ced-11e9-8d57-0e2b588239d9.gif)
 
-Rotate and pinch ([Codesandbox](https://vj96q9x0my.codesandbox.io/)):
+Rotate and pinch ([Codesandbox](https://z8okl48ox.codesandbox.io/)):
 
 ![demo](https://user-images.githubusercontent.com/6210380/57109168-9e44ce80-6ce9-11e9-8215-8f42082564e6.gif)
 
